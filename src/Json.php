@@ -104,6 +104,29 @@ final class Json
     }
 
     /**
+     * Reads JSON file and parses into a PHP array.
+     *
+     * @param string $file    The JSON file
+     * @param int    $options Bitmask of JSON decode options
+     * @param int    $depth   Recursion depth
+     *
+     * @throws ParseException If the JSON is not readable or valid
+     *
+     * @return array
+     */
+    public static function parseFile($file, $options = 0, $depth = 512)
+    {
+        if (!is_file($file)) {
+            throw new ParseException(sprintf('File "%s" does not exist.', $file));
+        }
+        if (!is_readable($file)) {
+            throw new ParseException(sprintf('File "%s" cannot be read.', $file));
+        }
+
+        return static::parse(file_get_contents($file), $options, $depth);
+    }
+
+    /**
      * Return whether the given string is JSON.
      *
      * @param mixed $json
